@@ -11,11 +11,15 @@ Lwjgl 2.9.3 is required to run:
 https://repo1.maven.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.3/lwjgl-2.9.3.jar
 
 And natives for the correct platform:
+https://repo1.maven.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3-natives-osx.jar
 https://repo1.maven.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3-natives-linux.jar
 https://repo1.maven.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3-natives-windows.jar
 
 extract the natives to some folder,
 and add a JVM argument "-Djava.library.path=PATH/TO/THAT/FOLDER"
+
+only tested on Windows but should also work on Linux.
+macOS removed OpenGL support so I don't know what that's going to give.
 
 Manual [citation needed]
 ------------------------
@@ -47,7 +51,7 @@ shift(move up) & ctrl(move down) can be used to tinker with the "debugcam"
 values
 
 the "use compiled camera path" checkbox does nothing in particular except for
-settings the uniform value
+setting the uniform value
 
 See the frag.glsl file in https://github.com/yugecin/metro to see how these
 values can be used
@@ -62,6 +66,7 @@ Hold Shift while dragging a red point to keep the next red point at the same
 value.
 Right click between red points to create a new point at that position.
 Right click before or after any red points to create a new one at the start/end.
+Right click on a red point to remove it.
 These values are loaded from the file with the same name as the shader file
 that is loaded plus ".pos". The load button discards any modifications and
 reloads the values from the file. Saving will save the current values to this
