@@ -479,6 +479,7 @@ public class ShaderThing2 extends JFrame implements WindowListener, ActionListen
 				List<String> lines = Files.readAllLines(file.toPath());
 				nl = new ArrayList<>(lines.size() + 2);
 				nl.add("static char *fragSource =\n");
+				boolean lastpound = false;
 				for (String line : lines) {
 					line = line.trim();
 					if (line.endsWith("//noexport")) {
@@ -490,7 +491,13 @@ public class ShaderThing2 extends JFrame implements WindowListener, ActionListen
 					}
 					if (line.length() > 0) {
 						if (line.startsWith("#")) {
+							if (!lastpound) {
+								line = "\\n" + line;
+							}
 							line += "\\n";
+							lastpound = true;
+						} else {
+							lastpound = false;
 						}
 						nl.add("\"" + line + "\"\n");
 					}
