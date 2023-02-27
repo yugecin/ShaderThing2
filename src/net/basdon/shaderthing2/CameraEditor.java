@@ -86,8 +86,8 @@ public class CameraEditor extends JFrame implements ChangeListener, ActionListen
 		this.getContentPane().add(mid, BorderLayout.CENTER);
 		this.setLocationByPlatform(true);
 		this.pack();
-		this.setVisible(true);
-		action("load");
+		//this.setVisible(true);
+		//action("load");
 	}
 
 	public static class CP

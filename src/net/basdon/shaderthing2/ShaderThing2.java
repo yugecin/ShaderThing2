@@ -106,7 +106,7 @@ public class ShaderThing2 extends JFrame implements WindowListener, ActionListen
 	{
 		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(this);
-		this.setMinimumSize(new Dimension(450, 400));
+		this.setMinimumSize(new Dimension(100, 400));
 		this.setPreferredSize(new Dimension(450, 800));
 
 		this.canvas = new Canvas();
@@ -243,7 +243,7 @@ public class ShaderThing2 extends JFrame implements WindowListener, ActionListen
 			errDlg(this, e, "failed to create watch service, shader will not reload");
 		}
 
-		if (2>1) {
+		if (2<1) {
 			FileDialog fd = new FileDialog(this);
 			fd.setMode(FileDialog.LOAD);
 			fd.setMultipleMode(false);
@@ -252,7 +252,9 @@ public class ShaderThing2 extends JFrame implements WindowListener, ActionListen
 				ShaderThing2.file = file;
 			}
 		}
-		//ShaderThing2.file = new File("D:/programming/demos/my - b - bv2022/frag.glsl");
+		//ShaderThing2.file = new File("D:/programming/demos/my - c - trsac2022/frag.glsl");
+		//ShaderThing2.file = new File("D:\\programming\\demos\\my - e - zenta2022\\frag.glsl");
+		ShaderThing2.file = new File("D:\\programming\\demos\\my - f - mountainbytes2023\\frag.glsl");
 		this.reloadShader();
 		SwingUtilities.invokeLater(this);
 		new CameraEditor();

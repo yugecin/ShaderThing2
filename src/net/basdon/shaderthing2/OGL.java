@@ -84,19 +84,37 @@ public class OGL extends Thread
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 		//GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex);
+		float fromx = 0f, fromy = 0f;
 		while (Display.isCreated() && !destroy) {
 			if (this.shaderToCompile != null) {
 				this.compileShader();
+				fromx = 0f; fromy = 0f;
 			}
 			//if (++delay>2) {
 				delay=0;
 			GL11.glViewport(0, 0, this.width, this.height);
 			if (this.sFrag != -1) {
-				GL41.glProgramUniform4f(this.sFrag, 0, ShaderThing2.vars[0].val,
-					2f, 2f, 2f);
-				GL11.glRecti(1, 1, -1, -1);
-				//GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex);
-				GL11.glCopyTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB, 0, 0, this.width, this.height, 0);
+				if (ShaderThing2.debugmove) {
+					// if debugmov we render continuously
+					GL41.glProgramUniform4f(this.sFrag, 0, this.width, this.height, fromx, fromy);
+					GL41.glProgramUniform4f(this.sFrag, 2, x, y, z, ShaderThing2.debugmove ? 2f : 0f);
+					GL41.glProgramUniform4f(this.sFrag, 3, h, v, 0, ShaderThing2.compiledcampath ? 2f : 0f);
+					GL11.glRecti(1, 1, -1, -1);
+				} else {
+					boolean done = fromy > 1.2f;
+					GL41.glProgramUniform4f(this.sFrag, 0, this.width, this.height, fromx, fromy);
+					GL41.glProgramUniform4f(this.sFrag, 1, done ? 2.0f : 0.0f, 0f, 0f, 0f);
+					GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex);
+					GL11.glRecti(1, 1, -1, -1);
+					if (!done) {
+						GL11.glCopyTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB, 0, 0, this.width, this.height, 0);
+						fromx += .1f;
+						if (fromx > 1.2f) {
+							fromx = 0f;
+							fromy += .1f;
+						}
+					}
+				}
 
 				//GL41.glProgramUniform1i(this.sFrag, 4, 0);
 				//GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex);
@@ -109,19 +127,21 @@ public class OGL extends Thread
 					f3 = ShaderThing2.vars[i * 4 + 3].val;
 					GL41.glProgramUniform4f(this.sFrag, i, f0, f1, f2, f3);
 				}
-				*/
+				/*
 				float[] cam = CameraEditor.values();
 				GL41.glProgramUniform4f(this.sFrag, 0, ShaderThing2.vars[0].val,
 					ShaderThing2.vars[1].val,
 					cam[3], cam[4]);
+				GL41.glProgramUniform4f(this.sFrag, 0, 0, this.width, this.height, 0);
 				GL41.glProgramUniform4f(this.sFrag, 1, cam[0], cam[1], cam[2],
 					ShaderThing2.vars[7].val);
 				GL41.glProgramUniform4f(this.sFrag, 2, x, y, z, ShaderThing2.debugmove ? 2f : 0f);
 				GL41.glProgramUniform4f(this.sFrag, 3, h, v, 0, ShaderThing2.compiledcampath ? 2f : 0f);
+				*/
 			}
-			GL11.glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-			GL11.glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
-			GL11.glRecti(1, 1, -1, -1);
+			//GL11.glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+			//GL11.glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+			//GL11.glRecti(1, 1, -1, -1);
 			Display.update(false);
 			//}
 			Display.processMessages();
@@ -173,7 +193,7 @@ public class OGL extends Thread
 				e.printStackTrace();
 			}
 			*/
-			Display.sync(24);
+			Display.sync(60);
 		}
 		GL11.glDeleteTextures(tex);
 		Display.destroy();
